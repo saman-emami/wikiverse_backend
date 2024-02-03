@@ -45,9 +45,9 @@ def article(request, language, slug):
     article = None
     
     try:
-        article = Article.objects.get(slug=slug, language=language)
+        article = Article.objects.get(slug=urllib.parse.unquote(slug, encoding='utf-8', errors='replace'), language=language)
     except:
-         return Response({'error': 404, "slug-encode": urllib.parse.unquote(slug, encoding='utf-8', errors='replace'), "lang":language})
+         return Response({'error': 404})
 
     if request.method == 'GET':
         serializer = GetArticleSerializer(article)
