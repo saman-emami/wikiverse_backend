@@ -46,7 +46,7 @@ def article(request, language, slug):
     try:
         article = Article.objects.get(slug=slug, language=language)
     except:
-         return Response({'error': 404})
+         return Response({'error': 404, "slug": slug, "lang":language})
 
     if request.method == 'GET':
         serializer = GetArticleSerializer(article)
