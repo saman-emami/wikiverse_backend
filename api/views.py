@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .serializers import GetArticleSerializer, PostArticleSerializer
 from articles.models import Article
+import urllib
 
 @api_view(['POST'])
 def register(request):
@@ -42,11 +43,11 @@ def articles(request):
 @permission_classes([IsAuthenticatedOrReadOnly])
 def article(request, language, slug):
     article = None
-
+    
     try:
         article = Article.objects.get(slug=slug, language=language)
     except:
-         return Response({'error': 404, "slug-encode": slug.encode("utf-8"),"slug-decode": slug.decode("utf-8"), "lang":language})
+         return Response({'error': 404, "slug-encode": urllib.parse.unquote(slug, encoding='utf-8', errors='replace'), "lang":language})
 
     if request.method == 'GET':
         serializer = GetArticleSerializer(article)
